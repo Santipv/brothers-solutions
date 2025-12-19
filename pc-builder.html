@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Brothers Solutions — PC Builder</title>
+  <meta name="description" content="Diseñador de PC paso a paso. Arma tu build y envíalo por WhatsApp." />
+
+  <!-- Misma vibra tipográfica (moderno + toque gaming) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0A1022;
+      --card:#0E1731cc;
+      --stroke:#ffffff1a;
+
+      --txt:#EAF0FF;
+      --muted:#AAB6E8;
+
+      --g:#38E7A6;
+      --r:#FF3D7F;
+      --y:#FFD24A;
+      --b:#5BB3FF;
+      --p:#B18CFF;
+
+      --shadow: 0 18px 45px rgba(0,0,0,.35);
+      --shadowSoft: 0 10px 25px rgba(0,0,0,.28);
+
+      --radius: 18px;
+      --radius2: 24px;
+
+      --max: 1120px;
+      --navH: 74px;
+
+      --ease: cubic-bezier(.2,.8,.2,1);
+      --ease2: cubic-bezier(.16,1,.3,1);
+    }
+
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      color:var(--txt);
+      font-family: "Rubik", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(91,179,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 80% 0%, rgba(255,61,127,.16), transparent 60%),
+        radial-gradient(900px 700px at 70% 90%, rgba(56,231,166,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 60%, #070A12 120%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='none'/%3E%3Cg opacity='.22'%3E%3Crect x='8' y='8' width='6' height='6' fill='%23FFFFFF'/%3E%3Crect x='32' y='20' width='4' height='4' fill='%23FFFFFF'/%3E%3Crect x='62' y='14' width='5' height='5' fill='%23FFFFFF'/%3E%3Crect x='92' y='36' width='4' height='4' fill='%23FFFFFF'/%3E%3Crect x='18' y='64' width='5' height='5' fill='%23FFFFFF'/%3E%3Crect x='74' y='74' width='6' height='6' fill='%23FFFFFF'/%3E%3Crect x='104' y='92' width='4' height='4' fill='%23FFFFFF'/%3E%3C/g%3E%3Cg opacity='.08'%3E%3Cpath d='M0 40H120' stroke='%23FFFFFF'/%3E%3Cpath d='M0 80H120' stroke='%23FFFFFF'/%3E%3Cpath d='M40 0V120' stroke='%23FFFFFF'/%3E%3Cpath d='M80 0V120' stroke='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
+      background-attachment: fixed, fixed, fixed, fixed, fixed;
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:min(var(--max), calc(100% - 40px)); margin:0 auto; }
+
+    /* NAV */
+    .nav{
+      position:sticky; top:0; z-index:1000;
+      height:var(--navH);
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(10,16,34,.78), rgba(10,16,34,.48));
+      border-bottom: 1px solid var(--stroke);
+    }
+    .navInner{
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .logo{
+      width:40px; height:40px;
+      border-radius:14px;
+      background: linear-gradient(135deg, rgba(56,231,166,.85), rgba(91,179,255,.75), rgba(255,61,127,.75));
+      box-shadow: var(--shadowSoft);
+      position:relative; overflow:hidden;
+      border: 1px solid rgba(255,255,255,.14);
+      flex: 0 0 40px;
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-30%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 45%);
+      transform: rotate(10deg);
+      opacity:.9;
+    }
+    .brandName{
+      font-family:"Space Grotesk","Rubik",sans-serif;
+      font-weight:800;
+      letter-spacing:.2px;
+      line-height:1.05;
+      font-size: 1.05rem;
+    }
+    .brandTag{
+      display:block;
+      font-weight:400;
+      color:var(--muted);
+      font-size:.82rem;
+      margin-top:2px;
+    }
+
+    .navRight{
+      display:flex; gap:10px; align-items:center;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .btn{
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border:0;
+      color: var(--txt);
+      font-weight:900;
+      letter-spacing:.2px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,210,74,.95), rgba(255,61,127,.85));
+      box-shadow: 0 14px 30px rgba(255,61,127,.18), 0 12px 26px rgba(255,210,74,.14);
+      transition: transform .22s var(--ease), filter .22s var(--ease), box-shadow .22s var(--ease);
+      position:relative;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+    .btn:before{
+      content:"";
+      position:absolute; inset:-80%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.55), transparent 40%);
+      transform: rotate(12deg);
+      opacity:.85;
+    }
+    .btn:hover{
+      transform: translateY(-2px) scale(1.01);
+      filter: saturate(1.08);
+      box-shadow: 0 16px 36px rgba(255,61,127,.22), 0 14px 30px rgba(255,210,74,.18);
+    }
+    .btn:active{ transform: translateY(0) scale(.995); }
+
+    .btnSecondary{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadowSoft);
+      font-weight:800;
+    }
+    .btnSecondary:before{ opacity:.55; }
+
+    .btnMini{
+      padding:10px 12px;
+      font-size:.92rem;
+      border-radius: 13px;
+    }
+
+    .icon{ width:18px; height:18px; flex:0 0 18px; }
+
+    /* Layout */
+    main{ padding: 28px 0 46px; }
+    .hero{
+      padding: 18px 0 14px;
+      display:grid;
+      gap:12px;
+    }
+    h1{
+      margin:0;
+      font-family:"Space Grotesk","Rubik",sans-serif;
+      font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+      letter-spacing:-.4px;
+      line-height:1.08;
+    }
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      line-height:1.55;
+      font-size: 1.02rem;
+      max-width: 72ch;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 14px;
+      align-items:start;
+      margin-top: 16px;
+    }
+
+    .panel{
+      padding: 18px 16px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(14,23,49,.78), rgba(14,23,49,.42));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panel:before{
+      content:"";
+      position:absolute; inset:-40%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(56,231,166,.20), transparent 45%),
+        radial-gradient(circle at 70% 20%, rgba(255,61,127,.18), transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(255,210,74,.14), transparent 55%);
+      transform: rotate(18deg);
+      opacity:.75;
+      pointer-events:none;
+    }
+    .panel > *{ position:relative; }
+
+    .progressWrap{
+      display:grid;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .progressTop{
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .stepPill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadowSoft);
+      font-weight:800;
+      font-size:.92rem;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(91,179,255,.95));
+      box-shadow: 0 0 0 4px rgba(91,179,255,.14);
+      animation: pulse 1.9s var(--ease) infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity:1; }
+      50%{ transform: scale(1.2); opacity:.85; }
+    }
+
+    .bar{
+      height: 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      overflow:hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    .bar > div{
+      height:100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(56,231,166,.9), rgba(91,179,255,.9), rgba(255,61,127,.85));
+      transition: width .35s var(--ease);
+    }
+
+    .step{
+      display:none;
+      opacity:0;
+      transform: translateY(10px);
+      transition: opacity .35s var(--ease), transform .35s var(--ease);
+    }
+    .step.active{
+      display:block;
+    }
+    .step.active.in{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    .stepTitle{
+      margin: 10px 0 8px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      letter-spacing:.1px;
+    }
+    .hint{
+      margin: 0 0 12px;
+      color: rgba(234,240,255,.75);
+      line-height:1.45;
+      font-size: .95rem;
+    }
+
+    .formGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .colSpan2{ grid-column: 1 / -1; }
+
+    label{
+      display:block;
+      font-weight:800;
+      font-size: .9rem;
+      color: rgba(234,240,255,.92);
+      margin-bottom: 6px;
+    }
+    input, select, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--txt);
+      outline:none;
+      transition: border-color .18s var(--ease), transform .18s var(--ease), background .18s var(--ease);
+      font-family: inherit;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(91,179,255,.55);
+      background: rgba(255,255,255,.075);
+      transform: translateY(-1px);
+    }
+    textarea{ min-height: 90px; resize: vertical; }
+
+    .segmented{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: rgba(234,240,255,.92);
+      font-weight:800;
+      font-size:.92rem;
+      transition: transform .2s var(--ease), background .2s var(--ease), border-color .2s var(--ease);
+      user-select:none;
+    }
+    .chip:hover{ transform: translateY(-2px); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.18); }
+    .chip.active{
+      background: linear-gradient(135deg, rgba(56,231,166,.18), rgba(91,179,255,.14), rgba(255,61,127,.12));
+      border-color: rgba(255,255,255,.22);
+    }
+
+    .warn{
+      display:none;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,61,127,.24);
+      background: rgba(255,61,127,.10);
+      color: rgba(234,240,255,.92);
+      font-size: .92rem;
+      line-height:1.45;
+    }
+    .warn.show{ display:block; }
+
+    .ok{
+      display:none;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(56,231,166,.22);
+      background: rgba(56,231,166,.10);
+      color: rgba(234,240,255,.92);
+      font-size: .92rem;
+      line-height:1.45;
+    }
+    .ok.show{ display:block; }
+
+    .actions{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.10);
+    }
+
+    .small{
+      color: rgba(234,240,255,.68);
+      font-size: .88rem;
+      line-height:1.45;
+      margin: 0;
+      max-width: 65ch;
+    }
+
+    /* Summary panel */
+    .summaryHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .summaryHeader h2{
+      margin:0;
+      font-family:"Space Grotesk","Rubik",sans-serif;
+      font-size: 1.3rem;
+      letter-spacing:-.2px;
+    }
+    .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      box-shadow: var(--shadowSoft);
+      font-weight:900;
+      font-size:.92rem;
+      white-space:nowrap;
+    }
+    .tag .coin{
+      width:12px; height:12px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.8), rgba(255,210,74,.95));
+      box-shadow: 0 0 0 4px rgba(255,210,74,.12);
+    }
+
+    .summaryList{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:8px;
+    }
+    .summaryList li{
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      display:flex;
+      justify-content:space-between;
+      gap: 10px;
+      align-items:flex-start;
+      box-shadow: var(--shadowSoft);
+    }
+    .k{
+      color: rgba(234,240,255,.82);
+      font-weight:900;
+      font-size:.92rem;
+      min-width: 120px;
+    }
+    .v{
+      color: rgba(234,240,255,.92);
+      font-weight:700;
+      font-size:.92rem;
+      text-align:right;
+      flex:1;
+      word-break: break-word;
+    }
+
+    .divider{
+      height:1px;
+      background: rgba(255,255,255,.10);
+      margin: 14px 0;
+    }
+
+    .priceBox{
+      display:grid;
+      gap:10px;
+      padding: 12px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(135deg, rgba(56,231,166,.10), rgba(91,179,255,.07), rgba(255,61,127,.06));
+      box-shadow: var(--shadowSoft);
+    }
+    .priceRow{
+      display:flex;
+      justify-content:space-between;
+      align-items:baseline;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .priceRow strong{
+      font-size: 1.12rem;
+      letter-spacing:.1px;
+    }
+    .muted{ color: var(--muted); }
+
+    /* Floating WA */
+    .waFloat{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:1200;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg, rgba(56,231,166,.22), rgba(91,179,255,.14));
+      box-shadow: var(--shadow);
+      transition: transform .22s var(--ease), background .22s var(--ease);
+      font-weight:900;
+      animation: waPop .6s cubic-bezier(.2,.9,.3,1) .35s both;
+    }
+    .waFloat:hover{ transform: translateY(-3px); }
+    .waDot{
+      width:12px; height:12px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.8), rgba(56,231,166,.95));
+      box-shadow: 0 0 0 4px rgba(56,231,166,.15);
+    }
+    .waTextDesktop{ display:inline; }
+    .waTextMobile{ display:none; }
+
+    @keyframes waPop{
+      from{ transform: translateY(18px) scale(.92); opacity:0; }
+      to{ transform: translateY(0) scale(1); opacity:1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .formGrid{ grid-template-columns: 1fr; }
+      .colSpan2{ grid-column:auto; }
+    }
+    @media (max-width: 560px){
+      .waTextDesktop{ display:none; }
+      .waTextMobile{ display:inline; }
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="nav" role="banner">
+    <div class="container navInner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="brandName">Brothers Solutions</div>
+          <span class="brandTag">PC Builder (Wizard)</span>
+        </div>
+      </div>
+
+      <div class="navRight">
+        <a class="btn btnSecondary btnMini" href="index.html" title="Volver a la landing (si existe)">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Volver
+        </a>
+        <a class="btn btnMini" id="navCta" href="#" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 12a9 9 0 0 1-13.8 7.6L3 21l1.5-4.1A9 9 0 1 1 21 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            <path d="M9.3 10.3c.4 1.2 1.6 2.7 2.8 3.6 1.3 1 2.5 1.4 3.2 1.5.4 0 .7-.2.9-.4l.6-.7c.2-.2.2-.5 0-.7l-1.4-1.2c-.2-.1-.5-.1-.7 0l-.4.4c-.2.2-.4.2-.6.1-1.1-.5-2.3-1.6-3-2.7-.1-.2-.1-.4.1-.6l.4-.4c.2-.2.2-.5 0-.7L10 8.2c-.2-.2-.5-.2-.7 0l-.7.8c-.2.2-.3.6-.2 1.3Z" fill="currentColor" opacity=".75"/>
+          </svg>
+          Cotizar
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>Diseñador de PC (paso a paso)</h1>
+      <p class="subtitle">
+        Armá tu build en 5 pasos con compatibilidad básica (filtrado por plataforma/socket y recomendación aproximada de PSU).
+        Al final, enviás todo por WhatsApp con un mensaje prellenado.
+      </p>
+    </section>
+
+    <section class="grid">
+      <!-- Wizard -->
+      <div class="panel" id="wizard">
+        <div class="progressWrap">
+          <div class="progressTop">
+            <div class="stepPill">
+              <span class="dot" aria-hidden="true"></span>
+              <span id="stepLabel">Paso 1 de 5</span>
+            </div>
+            <div class="stepPill">
+              <span aria-hidden="true">🎮</span>
+              <span id="quickStatus">Listo para empezar</span>
+            </div>
+          </div>
+          <div class="bar" aria-label="Progreso">
+            <div id="barFill"></div>
+          </div>
+        </div>
+
+        <div class="warn" id="warnBox">⚠️</div>
+        <div class="ok" id="okBox">✅</div>
+
+        <!-- STEP 1 -->
+        <div class="step active" data-step="1">
+          <div class="stepTitle">Paso 1: Presupuesto + uso</div>
+          <p class="hint">Elegí tu moneda y presupuesto objetivo. Ajustaremos sugerencias de forma aproximada.</p>
+
+          <div class="formGrid">
+            <div>
+              <label for="currency">Moneda</label>
+              <select id="currency">
+                <option value="COP" selected>COP (Colombia)</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="budgetMode">Tipo de presupuesto</label>
+              <select id="budgetMode">
+                <option value="range" selected>Slider</option>
+                <option value="input">Ingreso manual</option>
+              </select>
+            </div>
+
+            <div class="colSpan2" id="budgetRangeWrap">
+              <label for="budgetRange">Presupuesto (aprox.)</label>
+              <input id="budgetRange" type="range" min="500000" max="10000000" step="50000" value="2500000" />
+              <p class="small" style="margin-top:8px;">
+                Valor actual: <strong id="budgetValue"></strong>
+              </p>
+            </div>
+
+            <div class="colSpan2" id="budgetInputWrap" style="display:none;">
+              <label for="budgetInput">Presupuesto (aprox.)</label>
+              <input id="budgetInput" type="number" min="1" step="1" placeholder="Ej: 2500000" />
+              <p class="small" style="margin-top:8px;">Te recomendamos poner un valor realista (incluyendo mano de obra si aplica).</p>
+            </div>
+
+            <div class="colSpan2">
+              <label>Uso principal</label>
+              <div class="segmented" id="usageChips" role="group" aria-label="Uso principal">
+                <div class="chip active" data-value="Gaming">Gaming</div>
+                <div class="chip" data-value="Diseño">Diseño</div>
+                <div class="chip" data-value="Oficina">Oficina</div>
+                <div class="chip" data-value="Streaming">Streaming</div>
+                <div class="chip" data-value="Programación">Programación</div>
+                <div class="chip" data-value="Mixto">Mixto</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <span class="small">Siguiente: Elegí plataforma (Intel/AMD) y socket simplificado.</span>
+            <button class="btn" data-next>
+              Siguiente
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="step" data-step="2">
+          <div class="stepTitle">Paso 2: Plataforma</div>
+          <p class="hint">Elegí CPU y socket/serie (simplificado). Esto filtrará procesadores y motherboards compatibles.</p>
+
+          <div class="formGrid">
+            <div class="colSpan2">
+              <label>CPU</label>
+              <div class="segmented" id="cpuBrandChips" role="group" aria-label="Marca de CPU">
+                <div class="chip active" data-value="AMD">AMD</div>
+                <div class="chip" data-value="Intel">Intel</div>
+              </div>
+            </div>
+
+            <div class="colSpan2">
+              <label for="platform">Socket / Serie (simplificado)</label>
+              <select id="platform"></select>
+              <p class="small" style="margin-top:8px;">
+                ⚠️ Revisa compatibilidad exacta al confirmar (BIOS, revisiones, DDR4/DDR5, etc.).
+              </p>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btnSecondary" data-prev>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Atrás
+            </button>
+            <button class="btn" data-next>
+              Siguiente
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div class="step" data-step="3">
+          <div class="stepTitle">Paso 3: Componentes principales</div>
+          <p class="hint">Seleccioná lo esencial. GPU es opcional (según uso/presupuesto). Recomendamos PSU aproximada según GPU.</p>
+
+          <div class="formGrid">
+            <div class="colSpan2">
+              <label for="cpuModel">Procesador</label>
+              <select id="cpuModel"></select>
+            </div>
+
+            <div class="colSpan2">
+              <label for="mobo">Motherboard (filtrada por plataforma)</label>
+              <select id="mobo"></select>
+            </div>
+
+            <div>
+              <label for="ramCap">RAM (capacidad)</label>
+              <select id="ramCap">
+                <option>16 GB</option>
+                <option selected>32 GB</option>
+                <option>64 GB</option>
+              </select>
+            </div>
+            <div>
+              <label for="ramSpeed">RAM (velocidad)</label>
+              <select id="ramSpeed">
+                <option>3200 MHz</option>
+                <option>3600 MHz</option>
+                <option selected>6000 MHz</option>
+                <option>6400 MHz</option>
+              </select>
+            </div>
+
+            <div class="colSpan2">
+              <label for="gpu">GPU (opcional)</label>
+              <select id="gpu"></select>
+              <p class="small" style="margin-top:8px;">Si es Oficina/Programación sin gráficos pesados, podés dejar “Sin GPU”.</p>
+            </div>
+
+            <div>
+              <label for="storageType">Almacenamiento</label>
+              <select id="storageType">
+                <option selected>SSD NVMe</option>
+                <option>SSD SATA</option>
+                <option>HDD</option>
+                <option>NVMe + HDD</option>
+              </select>
+            </div>
+            <div>
+              <label for="storageCap">Capacidad</label>
+              <select id="storageCap">
+                <option>500 GB</option>
+                <option selected>1 TB</option>
+                <option>2 TB</option>
+                <option>4 TB</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="psu">Fuente (PSU)</label>
+              <select id="psu">
+                <option>550 W</option>
+                <option>650 W</option>
+                <option selected>750 W</option>
+                <option>850 W</option>
+                <option>1000 W</option>
+              </select>
+              <p class="small" style="margin-top:8px;">Recomendación automática: <strong id="psuRec">—</strong></p>
+            </div>
+
+            <div>
+              <label for="caseSize">Case (tamaño)</label>
+              <select id="caseSize">
+                <option>Mini-ITX</option>
+                <option>Micro-ATX</option>
+                <option selected>ATX</option>
+              </select>
+            </div>
+
+            <div class="colSpan2">
+              <label for="cooling">Refrigeración</label>
+              <select id="cooling">
+                <option selected>Aire (Air cooler)</option>
+                <option>Líquida 240mm</option>
+                <option>Líquida 360mm</option>
+              </select>
+            </div>
+
+            <div class="colSpan2">
+              <div class="warn" id="compatBox">⚠️ Compatibilidad</div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btnSecondary" data-prev>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Atrás
+            </button>
+            <button class="btn" data-next>
+              Siguiente
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 4 -->
+        <div class="step" data-step="4">
+          <div class="stepTitle">Paso 4: Extras</div>
+          <p class="hint">Opcional: periféricos, RGB y conectividad extra.</p>
+
+          <div class="formGrid">
+            <div class="colSpan2">
+              <label for="peripherals">Periféricos (opcional)</label>
+              <select id="peripherals">
+                <option selected>Ninguno / Ya tengo</option>
+                <option>Kit básico (teclado + mouse)</option>
+                <option>Gaming (teclado mecánico + mouse)</option>
+                <option>Streaming (mic + cámara)</option>
+                <option>Monitor (agregar)</option>
+              </select>
+            </div>
+
+            <div>
+              <label>RGB</label>
+              <div class="segmented" id="rgbChips">
+                <div class="chip active" data-value="Sí">Sí</div>
+                <div class="chip" data-value="No">No</div>
+              </div>
+            </div>
+
+            <div>
+              <label>WiFi / Bluetooth</label>
+              <div class="segmented" id="wifiChips">
+                <div class="chip active" data-value="Sí">Sí</div>
+                <div class="chip" data-value="No">No</div>
+              </div>
+            </div>
+
+            <div class="colSpan2">
+              <label for="notes">Notas (opcional)</label>
+              <textarea id="notes" placeholder="Ej: Prefiero silenciosa, quiero estética blanca, ya tengo GPU, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btnSecondary" data-prev>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Atrás
+            </button>
+            <button class="btn" data-next>
+              Siguiente
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 5 -->
+        <div class="step" data-step="5">
+          <div class="stepTitle">Paso 5: Resumen final</div>
+          <p class="hint">Revisá tu build. Al enviar, se abrirá WhatsApp con el resumen listo para cotizar.</p>
+
+          <div class="priceBox" style="margin-bottom:12px;">
+            <div class="priceRow">
+              <span class="muted">Precio estimado</span>
+              <strong id="priceEst">Estimado</strong>
+            </div>
+            <p class="small" style="margin:0;">
+              Si no hay precios exactos, dejamos “Estimado”. Podemos ajustar marcas/modelos al confirmar.
+            </p>
+          </div>
+
+          <div class="warn show" style="margin-bottom:10px;">
+            ⚠️ Revisa compatibilidad exacta al confirmar (BIOS, medidas del case, conectores, etc.).
+          </div>
+
+          <div class="ok show" style="margin-bottom:10px;">
+            ✅ ¿Quieres que lo armemos por ti?
+          </div>
+
+          <div class="actions">
+            <button class="btn btnSecondary" data-prev>
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Atrás
+            </button>
+            <button class="btn" id="sendWa">
+              Enviar por WhatsApp
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M21 12a9 9 0 0 1-13.8 7.6L3 21l1.5-4.1A9 9 0 1 1 21 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M9.3 10.3c.4 1.2 1.6 2.7 2.8 3.6 1.3 1 2.5 1.4 3.2 1.5.4 0 .7-.2.9-.4l.6-.7c.2-.2.2-.5 0-.7l-1.4-1.2c-.2-.1-.5-.1-.7 0l-.4.4c-.2.2-.4.2-.6.1-1.1-.5-2.3-1.6-3-2.7-.1-.2-.1-.4.1-.6l.4-.4c.2-.2.2-.5 0-.7L10 8.2c-.2-.2-.5-.2-.7 0l-.7.8c-.2.2-.3.6-.2 1.3Z" fill="currentColor" opacity=".75"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <aside class="panel" id="summary">
+        <div class="summaryHeader">
+          <h2>Resumen en vivo</h2>
+          <div class="tag"><span class="coin" aria-hidden="true"></span><span id="liveTag">Build</span></div>
+        </div>
+
+        <ul class="summaryList" id="summaryList"></ul>
+
+        <div class="divider"></div>
+
+        <p class="small" id="summaryNote">
+          Tip: Si querés, dejá “Sin GPU” y te recomendamos opciones según presupuesto.
+        </p>
+
+        <div class="actions" style="border-top:0; padding-top:0; margin-top:12px;">
+          <a class="btn btnSecondary btnMini" id="resetBtn" href="#">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 12a9 9 0 0 1 15-6M21 12a9 9 0 0 1-15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M3 6v6h6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M21 18v-6h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Reset
+          </a>
+          <a class="btn btnMini" id="quickWa" href="#" rel="noopener">
+            Cotizar
+          </a>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <!-- Botón flotante WhatsApp -->
+  <a class="waFloat" id="waFloat" href="#" rel="noopener" aria-label="Cotizar por WhatsApp">
+    <span class="waDot" aria-hidden="true"></span>
+    <span class="waTextDesktop">Cotizar por WhatsApp</span>
+    <span class="waTextMobile">Cotizar</span>
+  </a>
+
+  <script>
+    // ================================
+    // CONFIG
+    // ================================
+    const WHATSAPP_NUMBER = "573116029726"; // tu número (sin +)
+
+    // Presupuesto configurable
+    const BUDGET = {
+      COP: { min: 500000, max: 10000000, step: 50000, default: 2500000 },
+      USD: { min: 300, max: 3000, step: 25, default: 900 }
+    };
+
+    // Datos simplificados (placeholder). Puedes editar/expandir libremente.
+    const DATA = {
+      platforms: {
+        AMD: [
+          { id:"AM4", label:"AM4 (Ryzen 3000/5000) — DDR4" },
+          { id:"AM5", label:"AM5 (Ryzen 7000/8000/9000) — DDR5" },
+        ],
+        Intel: [
+          { id:"LGA1200", label:"LGA1200 (10th/11th Gen) — DDR4" },
+          { id:"LGA1700", label:"LGA1700 (12th/13th/14th Gen) — DDR4/DDR5" },
+        ]
+      },
+
+      cpus: [
+        // AMD AM4
+        { brand:"AMD", platform:"AM4", name:"Ryzen 5 5600", tier:"mid" },
+        { brand:"AMD", platform:"AM4", name:"Ryzen 7 5700X", tier:"upper" },
+        { brand:"AMD", platform:"AM4", name:"Ryzen 7 5800X3D", tier:"gaming" },
+        // AMD AM5
+        { brand:"AMD", platform:"AM5", name:"Ryzen 5 7600", tier:"mid" },
+        { brand:"AMD", platform:"AM5", name:"Ryzen 7 7700", tier:"upper" },
+        { brand:"AMD", platform:"AM5", name:"Ryzen 7 7800X3D", tier:"gaming" },
+        // Intel LGA1700
+        { brand:"Intel", platform:"LGA1700", name:"Core i5-12400F", tier:"mid" },
+        { brand:"Intel", platform:"LGA1700", name:"Core i5-13400F", tier:"mid" },
+        { brand:"Intel", platform:"LGA1700", name:"Core i7-13700F", tier:"upper" },
+        { brand:"Intel", platform:"LGA1700", name:"Core i7-14700K", tier:"upper" },
+        // Intel LGA1200
+        { brand:"Intel", platform:"LGA1200", name:"Core i5-10400F", tier:"entry" },
+        { brand:"Intel", platform:"LGA1200", name:"Core i7-10700", tier:"mid" }
+      ],
+
+      mobos: [
+        // AMD AM4
+        { platform:"AM4", name:"B550 (ATX) — VRM sólido", size:"ATX", mem:"DDR4" },
+        { platform:"AM4", name:"B550M (mATX) — compacto", size:"Micro-ATX", mem:"DDR4" },
+        { platform:"AM4", name:"X570 (ATX) — premium", size:"ATX", mem:"DDR4" },
+        // AMD AM5
+        { platform:"AM5", name:"B650 (ATX) — DDR5", size:"ATX", mem:"DDR5" },
+        { platform:"AM5", name:"B650M (mATX) — DDR5", size:"Micro-ATX", mem:"DDR5" },
+        { platform:"AM5", name:"X670 (ATX) — premium", size:"ATX", mem:"DDR5" },
+        // Intel LGA1700
+        { platform:"LGA1700", name:"B660 (ATX) — balance", size:"ATX", mem:"DDR4/DDR5" },
+        { platform:"LGA1700", name:"B760M (mATX) — moderno", size:"Micro-ATX", mem:"DDR4/DDR5" },
+        { platform:"LGA1700", name:"Z790 (ATX) — alto rendimiento", size:"ATX", mem:"DDR4/DDR5" },
+        // Intel LGA1200
+        { platform:"LGA1200", name:"B460 (ATX) — clásico", size:"ATX", mem:"DDR4" },
+        { platform:"LGA1200", name:"Z490 (ATX) — premium", size:"ATX", mem:"DDR4" },
+      ],
+
+      gpus: [
+        { name:"Sin GPU (usar integrada / después)", wattsMin: 450, tier:"none" },
+        { name:"GTX 1660 Super / similar", wattsMin: 550, tier:"entry" },
+        { name:"RTX 3060 / 4060", wattsMin: 650, tier:"mid" },
+        { name:"RTX 4070 / 4070 Super", wattsMin: 750, tier:"upper" },
+        { name:"RTX 4080 / 4090", wattsMin: 850, tier:"enthusiast" }
+      ]
+    };
+
+    // Reglas aproximadas PSU según GPU (wattsMin del gpu)
+    function recommendPsuWatts(selectedGpuName){
+      const gpu = DATA.gpus.find(g => g.name === selectedGpuName);
+      if(!gpu) return 650;
+      return gpu.wattsMin || 650;
+    }
+
+    // ================================
+    // Estado
+    // ================================
+    const state = {
+      currency: "COP",
+      budget: BUDGET.COP.default,
+      usage: "Gaming",
+      cpuBrand: "AMD",
+      platform: "AM4",
+
+      cpuModel: "",
+      mobo: "",
+      ramCap: "32 GB",
+      ramSpeed: "6000 MHz",
+      gpu: "Sin GPU (usar integrada / después)",
+      storageType: "SSD NVMe",
+      storageCap: "1 TB",
+      psu: "750 W",
+      caseSize: "ATX",
+      cooling: "Aire (Air cooler)",
+
+      peripherals: "Ninguno / Ya tengo",
+      rgb: "Sí",
+      wifi: "Sí",
+      notes: ""
+    };
+
+    // ================================
+    // Utils
+    // ================================
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+
+    function formatMoney(value, currency){
+      const v = Number(value || 0);
+      try{
+        return new Intl.NumberFormat("es-CO", {
+          style:"currency",
+          currency,
+          maximumFractionDigits: currency === "COP" ? 0 : 0
+        }).format(v);
+      }catch{
+        return currency + " " + v.toLocaleString();
+      }
+    }
+
+    function waLink(msg){
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+    }
+
+    function setChips(containerId, value){
+      const box = document.getElementById(containerId);
+      if(!box) return;
+      box.querySelectorAll(".chip").forEach(c => {
+        c.classList.toggle("active", c.dataset.value === value);
+      });
+    }
+
+    function bindChips(containerId, onChange){
+      const box = document.getElementById(containerId);
+      if(!box) return;
+      box.addEventListener("click", (e) => {
+        const chip = e.target.closest(".chip");
+        if(!chip) return;
+        box.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        onChange(chip.dataset.value);
+      });
+    }
+
+    function fillSelect(selectEl, options, placeholder="Seleccionar…"){
+      selectEl.innerHTML = "";
+      if(placeholder){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = placeholder;
+        opt.disabled = true;
+        opt.selected = true;
+        selectEl.appendChild(opt);
+      }
+      options.forEach(o => {
+        const opt = document.createElement("option");
+        opt.value = o.value ?? o;
+        opt.textContent = o.label ?? o;
+        selectEl.appendChild(opt);
+      });
+    }
+
+    // ================================
+    // Wizard logic
+    // ================================
+    const steps = $$(".step");
+    let currentStep = 1;
+
+    const stepLabel = $("#stepLabel");
+    const barFill = $("#barFill");
+    const quickStatus = $("#quickStatus");
+    const warnBox = $("#warnBox");
+    const okBox = $("#okBox");
+    const compatBox = $("#compatBox");
+    const psuRec = $("#psuRec");
+
+    function showWarn(text){
+      warnBox.textContent = text;
+      warnBox.classList.add("show");
+      okBox.classList.remove("show");
+    }
+    function showOk(text){
+      okBox.textContent = text;
+      okBox.classList.add("show");
+      warnBox.classList.remove("show");
+    }
+    function clearAlerts(){
+      warnBox.classList.remove("show");
+      okBox.classList.remove("show");
+    }
+
+    function goStep(n){
+      currentStep = Math.max(1, Math.min(5, n));
+      steps.forEach(s => {
+        const isActive = Number(s.dataset.step) === currentStep;
+        s.classList.toggle("active", isActive);
+        s.classList.remove("in");
+        if(isActive){
+          requestAnimationFrame(()=> s.classList.add("in"));
+        }
+      });
+      stepLabel.textContent = `Paso ${currentStep} de 5`;
+      barFill.style.width = `${((currentStep-1)/4)*100}%`;
+      clearAlerts();
+      validateAndHint();
+      renderSummary();
+      if(currentStep === 5){
+        barFill.style.width = "100%";
+        buildSummaryFinal();
+      }
+    }
+
+    // Simple validations per step
+    function validateStep(step){
+      if(step === 2){
+        if(!state.platform) return { ok:false, msg:"⚠️ Elegí una plataforma (socket/serie) para continuar." };
+      }
+      if(step === 3){
+        const required = ["cpuModel","mobo","ramCap","ramSpeed","storageType","storageCap","psu","caseSize","cooling"];
+        for(const k of required){
+          if(!state[k]) return { ok:false, msg:"⚠️ Completa los componentes principales antes de continuar." };
+        }
+      }
+      return { ok:true, msg:"" };
+    }
+
+    function validateAndHint(){
+      // PSU guidance
+      const rec = recommendPsuWatts(state.gpu);
+      psuRec.textContent = rec ? `${rec} W (aprox.)` : "—";
+
+      // Compatibility message
+      if(currentStep === 3){
+        const recW = rec;
+        const selectedW = parseInt(String(state.psu).replace(/\D/g,""),10) || 0;
+        let msg = "⚠️ Revisa compatibilidad exacta al confirmar (BIOS/DDR/medidas).";
+
+        // PSU check
+        if(selectedW && recW && selectedW < recW){
+          msg += `\n• PSU: Para tu GPU, sugerimos al menos ${recW}W.`;
+          compatBox.classList.add("show");
+          compatBox.textContent = msg;
+          showWarn("⚠️ Ajusta la PSU para evitar problemas de estabilidad.");
+        }else{
+          compatBox.classList.add("show");
+          compatBox.textContent = msg;
+          showOk("✅ Vas bien. Falta poco para el resumen.");
+        }
+
+        // DDR hint
+        const plat = state.platform;
+        const ramSpeed = state.ramSpeed || "";
+        if(plat === "AM4" && parseInt(ramSpeed) >= 6000){
+          compatBox.textContent += "\n• AM4 suele ir mejor con DDR4 3200–3600 (según kit/placa).";
+        }
+        if(plat === "AM5" && parseInt(ramSpeed) < 5600){
+          compatBox.textContent += "\n• AM5 rinde mejor con DDR5 (ideal 6000MHz aprox.).";
+        }
+      }
+
+      // Quick status
+      const usageIcon = ({
+        "Gaming":"🎮","Diseño":"🎨","Oficina":"🧾","Streaming":"🎥","Programación":"💻","Mixto":"🧩"
+      })[state.usage] || "🧩";
+
+      quickStatus.textContent = `${usageIcon} ${state.usage} • ${state.cpuBrand} ${state.platform}`;
+    }
+
+    // Buttons next/prev
+    $("#wizard").addEventListener("click", (e) => {
+      const next = e.target.closest("[data-next]");
+      const prev = e.target.closest("[data-prev]");
+      if(next){
+        const check = validateStep(currentStep);
+        if(!check.ok){
+          showWarn(check.msg);
+          return;
+        }
+        goStep(currentStep + 1);
+      }
+      if(prev){
+        goStep(currentStep - 1);
+      }
+    });
+
+    // ================================
+    // Step 1: budget + usage
+    // ================================
+    const currencySel = $("#currency");
+    const budgetMode = $("#budgetMode");
+    const budgetRangeWrap = $("#budgetRangeWrap");
+    const budgetInputWrap = $("#budgetInputWrap");
+    const budgetRange = $("#budgetRange");
+    const budgetInput = $("#budgetInput");
+    const budgetValue = $("#budgetValue");
+
+    function applyBudgetConfig(){
+      const cfg = BUDGET[state.currency];
+      budgetRange.min = cfg.min;
+      budgetRange.max = cfg.max;
+      budgetRange.step = cfg.step;
+      budgetRange.value = cfg.default;
+      state.budget = cfg.default;
+
+      budgetInput.value = "";
+      budgetValue.textContent = formatMoney(state.budget, state.currency);
+      renderSummary();
+    }
+
+    currencySel.addEventListener("change", () => {
+      state.currency = currencySel.value;
+      applyBudgetConfig();
+    });
+
+    budgetMode.addEventListener("change", () => {
+      const mode = budgetMode.value;
+      budgetRangeWrap.style.display = mode === "range" ? "" : "none";
+      budgetInputWrap.style.display = mode === "input" ? "" : "none";
+      if(mode === "input" && !budgetInput.value){
+        budgetInput.value = state.budget;
+      }
+    });
+
+    budgetRange.addEventListener("input", () => {
+      state.budget = Number(budgetRange.value);
+      budgetValue.textContent = formatMoney(state.budget, state.currency);
+      renderSummary();
+    });
+
+    budgetInput.addEventListener("input", () => {
+      const v = Number(budgetInput.value || 0);
+      if(v > 0) state.budget = v;
+      budgetValue.textContent = formatMoney(state.budget, state.currency);
+      renderSummary();
+    });
+
+    bindChips("usageChips", (val) => {
+      state.usage = val;
+      renderSummary();
+      validateAndHint();
+      // Simple nudge: si oficina/programación, sugerir sin GPU
+      if(["Oficina","Programación"].includes(state.usage) && state.gpu !== "Sin GPU (usar integrada / después)"){
+        showOk("✅ Tip: Para Oficina/Programación, podés dejar Sin GPU (si no haces gráficos pesados).");
+      }
+    });
+
+    // ================================
+    // Step 2: platform
+    // ================================
+    const platformSel = $("#platform");
+
+    function populatePlatforms(){
+      const list = DATA.platforms[state.cpuBrand] || [];
+      fillSelect(platformSel, list.map(p => ({ value:p.id, label:p.label })), null);
+      // default to first if current not match
+      const exists = list.some(p => p.id === state.platform);
+      state.platform = exists ? state.platform : (list[0]?.id || "");
+      platformSel.value = state.platform;
+      populateCpuAndMobo();
+      validateAndHint();
+      renderSummary();
+    }
+
+    bindChips("cpuBrandChips", (val) => {
+      state.cpuBrand = val;
+      // reset platform to first for that brand
+      const list = DATA.platforms[state.cpuBrand] || [];
+      state.platform = list[0]?.id || "";
+      populatePlatforms();
+      setChips("cpuBrandChips", val);
+    });
+
+    platformSel.addEventListener("change", () => {
+      state.platform = platformSel.value;
+      populateCpuAndMobo();
+      validateAndHint();
+      renderSummary();
+    });
+
+    // ================================
+    // Step 3: components
+    // ================================
+    const cpuModelSel = $("#cpuModel");
+    const moboSel = $("#mobo");
+    const gpuSel = $("#gpu");
+    const ramCapSel = $("#ramCap");
+    const ramSpeedSel = $("#ramSpeed");
+    const storageTypeSel = $("#storageType");
+    const storageCapSel = $("#storageCap");
+    const psuSel = $("#psu");
+    const caseSizeSel = $("#caseSize");
+    const coolingSel = $("#cooling");
+
+    function populateCpuAndMobo(){
+      // CPUs
+      const cpus = DATA.cpus
+        .filter(c => c.brand === state.cpuBrand && c.platform === state.platform)
+        .map(c => c.name);
+
+      fillSelect(cpuModelSel, cpus.map(n => ({ value:n, label:n })), null);
+      state.cpuModel = cpus[0] || "";
+      cpuModelSel.value = state.cpuModel;
+
+      // Mobos filtered by platform
+      const mobos = DATA.mobos
+        .filter(m => m.platform === state.platform)
+        .map(m => m.name);
+
+      fillSelect(moboSel, mobos.map(n => ({ value:n, label:n })), null);
+      state.mobo = mobos[0] || "";
+      moboSel.value = state.mobo;
+
+      // GPU list (simple — could be tuned by usage/budget)
+      fillSelect(gpuSel, DATA.gpus.map(g => ({ value:g.name, label:g.name })), null);
+
+      // Smart default GPU based on usage
+      if(["Oficina"].includes(state.usage)){
+        state.gpu = "Sin GPU (usar integrada / después)";
+      }else if(["Diseño","Streaming","Gaming","Mixto"].includes(state.usage)){
+        state.gpu = "RTX 3060 / 4060";
+      }else if(["Programación"].includes(state.usage)){
+        state.gpu = "Sin GPU (usar integrada / después)";
+      }
+      gpuSel.value = state.gpu;
+
+      // PSU recommendation update
+      const rec = recommendPsuWatts(state.gpu);
+      psuRec.textContent = `${rec} W (aprox.)`;
+
+      // If selected PSU is too low, bump to closest available
+      bumpPsuToRecommended(rec);
+
+      // RAM defaults based on platform
+      if(state.platform === "AM4" || state.platform === "LGA1200"){
+        if(state.ramSpeed === "6000 MHz") state.ramSpeed = "3600 MHz";
+      }else{
+        if(state.ramSpeed === "3600 MHz" || state.ramSpeed === "3200 MHz") state.ramSpeed = "6000 MHz";
+      }
+      ramSpeedSel.value = state.ramSpeed;
+
+      renderSummary();
+      validateAndHint();
+    }
+
+    function bumpPsuToRecommended(rec){
+      const options = Array.from(psuSel.options).map(o => parseInt(o.value,10)).filter(Boolean).sort((a,b)=>a-b);
+      const pick = options.find(w => w >= rec) || options[options.length-1];
+      if(pick){
+        state.psu = `${pick} W`;
+        psuSel.value = state.psu;
+      }
+    }
+
+    cpuModelSel.addEventListener("change", ()=>{ state.cpuModel = cpuModelSel.value; renderSummary(); });
+    moboSel.addEventListener("change", ()=>{ state.mobo = moboSel.value; renderSummary(); });
+    ramCapSel.addEventListener("change", ()=>{ state.ramCap = ramCapSel.value; renderSummary(); });
+    ramSpeedSel.addEventListener("change", ()=>{ state.ramSpeed = ramSpeedSel.value; renderSummary(); validateAndHint(); });
+    storageTypeSel.addEventListener("change", ()=>{ state.storageType = storageTypeSel.value; renderSummary(); });
+    storageCapSel.addEventListener("change", ()=>{ state.storageCap = storageCapSel.value; renderSummary(); });
+
+    gpuSel.addEventListener("change", ()=> {
+      state.gpu = gpuSel.value;
+      const rec = recommendPsuWatts(state.gpu);
+      psuRec.textContent = `${rec} W (aprox.)`;
+      bumpPsuToRecommended(rec);
+      renderSummary();
+      validateAndHint();
+    });
+
+    psuSel.addEventListener("change", ()=>{ state.psu = psuSel.value; renderSummary(); validateAndHint(); });
+    caseSizeSel.addEventListener("change", ()=>{ state.caseSize = caseSizeSel.value; renderSummary(); });
+    coolingSel.addEventListener("change", ()=>{ state.cooling = coolingSel.value; renderSummary(); });
+
+    // ================================
+    // Step 4: extras
+    // ================================
+    const peripheralsSel = $("#peripherals");
+    const notesEl = $("#notes");
+
+    bindChips("rgbChips", (val)=>{ state.rgb = val; renderSummary(); });
+    bindChips("wifiChips", (val)=>{ state.wifi = val; renderSummary(); });
+
+    peripheralsSel.addEventListener("change", ()=>{ state.peripherals = peripheralsSel.value; renderSummary(); });
+    notesEl.addEventListener("input", ()=>{ state.notes = notesEl.value; renderSummary(); });
+
+    // ================================
+    // Summary + WhatsApp
+    // ================================
+    const summaryList = $("#summaryList");
+    const liveTag = $("#liveTag");
+    const navCta = $("#navCta");
+    const quickWa = $("#quickWa");
+    const waFloat = $("#waFloat");
+    const sendWa = $("#sendWa");
+    const priceEst = $("#priceEst");
+    const resetBtn = $("#resetBtn");
+
+    function summaryPairs(){
+      const b = formatMoney(state.budget, state.currency);
+      const cpu = state.cpuModel || "(elige CPU)";
+      const mobo = state.mobo || "(elige motherboard)";
+      const storage = `${state.storageType} • ${state.storageCap}`;
+      return [
+        ["Presupuesto", b],
+        ["Uso", state.usage],
+        ["Plataforma", `${state.cpuBrand} • ${state.platform}`],
+        ["CPU", cpu],
+        ["Motherboard", mobo],
+        ["RAM", `${state.ramCap} • ${state.ramSpeed}`],
+        ["GPU", state.gpu || "—"],
+        ["Almacenamiento", storage],
+        ["PSU", state.psu || "—"],
+        ["Case", state.caseSize || "—"],
+        ["Refrigeración", state.cooling || "—"],
+        ["Periféricos", state.peripherals || "—"],
+        ["RGB", state.rgb],
+        ["WiFi/Bluetooth", state.wifi],
+      ];
+    }
+
+    function renderSummary(){
+      const pairs = summaryPairs();
+      summaryList.innerHTML = "";
+      pairs.forEach(([k,v]) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<span class="k">${k}</span><span class="v">${escapeHtml(String(v))}</span>`;
+        summaryList.appendChild(li);
+      });
+
+      const tag = `${state.usage} • ${state.cpuBrand}`;
+      liveTag.textContent = tag;
+
+      // Price estimate: placeholder
+      priceEst.textContent = "Estimado";
+
+      // WhatsApp quick links
+      const msg = buildWhatsAppMessage(false);
+      navCta.href = waLink("Hola Brothers Solutions 👋 Quiero cotizar un PC. ¿Me ayudan por favor?");
+      quickWa.href = waLink(msg);
+      waFloat.href = waLink(msg);
+    }
+
+    function buildSummaryFinal(){
+      // called on step 5 to ensure message is fresh
+      const msg = buildWhatsAppMessage(true);
+      $("#quickStatus").textContent = "✅ Resumen listo para enviar";
+      // Update send button handler
+      sendWa.onclick = () => window.open(waLink(msg), "_blank", "noopener,noreferrer");
+    }
+
+    function buildWhatsAppMessage(includeQuestion){
+      const budget = formatMoney(state.budget, state.currency);
+      const rec = recommendPsuWatts(state.gpu);
+      const selectedW = parseInt(String(state.psu).replace(/\D/g,""),10) || 0;
+      const psuLine = selectedW && rec && selectedW < rec
+        ? `PSU: ${state.psu} (⚠️ sugerido ≥ ${rec}W aprox.)`
+        : `PSU: ${state.psu} (sugerido ≥ ${rec}W aprox.)`;
+
+      const lines = [
+        "Hola Brothers Solutions 👋",
+        "Quiero cotizar / armar esta PC:",
+        "",
+        `• Presupuesto: ${budget}`,
+        `• Uso: ${state.usage}`,
+        `• Plataforma: ${state.cpuBrand} • ${state.platform}`,
+        "",
+        `• CPU: ${state.cpuModel || "Por definir"}`,
+        `• Motherboard: ${state.mobo || "Por definir"}`,
+        `• RAM: ${state.ramCap} • ${state.ramSpeed}`,
+        `• GPU: ${state.gpu || "Sin GPU"}`,
+        `• Almacenamiento: ${state.storageType} • ${state.storageCap}`,
+        `• ${psuLine}`,
+        `• Case: ${state.caseSize}`,
+        `• Refrigeración: ${state.cooling}`,
+        "",
+        `• Periféricos: ${state.peripherals}`,
+        `• RGB: ${state.rgb}`,
+        `• WiFi/Bluetooth: ${state.wifi}`,
+      ];
+
+      if(state.notes && state.notes.trim()){
+        lines.push("", "• Notas:", state.notes.trim());
+      }
+
+      lines.push("", "⚠️ Nota: Revisa compatibilidad exacta al confirmar (BIOS, medidas, conectores, DDR).");
+
+      if(includeQuestion){
+        lines.push("", "¿Quieres que lo armemos por ti?");
+      }
+
+      lines.push("", "(Enviado desde el PC Builder)");
+
+      return lines.join("\n");
+    }
+
+    function escapeHtml(str){
+      return str.replace(/[&<>"']/g, (m) => ({
+        "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+      }[m]));
+    }
+
+    resetBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      // reset state to defaults quickly
+      state.currency = "COP";
+      state.budget = BUDGET.COP.default;
+      state.usage = "Gaming";
+      state.cpuBrand = "AMD";
+      state.platform = "AM4";
+
+      state.ramCap = "32 GB";
+      state.ramSpeed = "6000 MHz";
+      state.gpu = "Sin GPU (usar integrada / después)";
+      state.storageType = "SSD NVMe";
+      state.storageCap = "1 TB";
+      state.psu = "750 W";
+      state.caseSize = "ATX";
+      state.cooling = "Aire (Air cooler)";
+      state.peripherals = "Ninguno / Ya tengo";
+      state.rgb = "Sí";
+      state.wifi = "Sí";
+      state.notes = "";
+
+      // UI reset
+      currencySel.value = state.currency;
+      budgetMode.value = "range";
+      budgetRangeWrap.style.display = "";
+      budgetInputWrap.style.display = "none";
+      applyBudgetConfig();
+      setChips("usageChips", state.usage);
+      setChips("cpuBrandChips", state.cpuBrand);
+      setChips("rgbChips", state.rgb);
+      setChips("wifiChips", state.wifi);
+      peripheralsSel.value = state.peripherals;
+      notesEl.value = "";
+
+      populatePlatforms();
+      goStep(1);
+      showOk("✅ Build reiniciada. ¡Empecemos de nuevo!");
+    });
+
+    // ================================
+    // Init
+    // ================================
+    function init(){
+      // Step 1 init
+      currencySel.value = state.currency;
+      budgetValue.textContent = formatMoney(state.budget, state.currency);
+      applyBudgetConfig();
+      setChips("usageChips", state.usage);
+
+      // Step 2 init
+      setChips("cpuBrandChips", state.cpuBrand);
+      populatePlatforms();
+
+      // Step 3 init selects
+      ramCapSel.value = state.ramCap;
+      ramSpeedSel.value = state.ramSpeed;
+      storageTypeSel.value = state.storageType;
+      storageCapSel.value = state.storageCap;
+      psuSel.value = state.psu;
+      caseSizeSel.value = state.caseSize;
+      coolingSel.value = state.cooling;
+
+      // Step 4 init
+      peripheralsSel.value = state.peripherals;
+      setChips("rgbChips", state.rgb);
+      setChips("wifiChips", state.wifi);
+
+      // Quick WhatsApp links default
+      const defaultMsg = "Hola Brothers Solutions 👋 Quiero cotizar un PC. ¿Me ayudan por favor?";
+      navCta.href = waLink(defaultMsg);
+      quickWa.href = waLink(defaultMsg);
+      waFloat.href = waLink(defaultMsg);
+
+      goStep(1);
+      renderSummary();
+      validateAndHint();
+    }
+
+    init();
+  </script>
+</body>
+</html>
