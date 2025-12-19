@@ -1,0 +1,1323 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brothers Solutions</title>
+  <meta name="description" content="PCs, Consolas y Web — Soluciones rápidas y con estilo. Brothers Solutions." />
+
+  <!-- Tipografía moderna con toque gaming (sin depender 100%: hay fallbacks) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#070A12;
+      --bg1:#0A1022;
+      --card:#0E1731cc;
+      --stroke:#ffffff1a;
+
+      --txt:#EAF0FF;
+      --muted:#AAB6E8;
+
+      --g:#38E7A6;   /* verde power */
+      --r:#FF3D7F;   /* rosa/rojo neon */
+      --y:#FFD24A;   /* dorado moneda */
+      --b:#5BB3FF;   /* azul */
+      --p:#B18CFF;   /* violeta */
+
+      --shadow: 0 18px 45px rgba(0,0,0,.35);
+      --shadowSoft: 0 10px 25px rgba(0,0,0,.28);
+
+      --radius: 18px;
+      --radius2: 24px;
+
+      --max: 1120px;
+
+      --ease: cubic-bezier(.2,.8,.2,1);
+      --ease2: cubic-bezier(.16,1,.3,1);
+
+      --navH: 74px;
+    }
+
+    /* Fondo con patrón pixel/retro sutil usando SVG inline (sin assets externos) */
+    body{
+      margin:0;
+      color:var(--txt);
+      font-family: "Rubik", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(91,179,255,.18), transparent 55%),
+        radial-gradient(900px 600px at 80% 0%, rgba(255,61,127,.16), transparent 60%),
+        radial-gradient(900px 700px at 70% 90%, rgba(56,231,166,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1) 60%, #070A12 120%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Crect width='120' height='120' fill='none'/%3E%3Cg opacity='.22'%3E%3Crect x='8' y='8' width='6' height='6' fill='%23FFFFFF'/%3E%3Crect x='32' y='20' width='4' height='4' fill='%23FFFFFF'/%3E%3Crect x='62' y='14' width='5' height='5' fill='%23FFFFFF'/%3E%3Crect x='92' y='36' width='4' height='4' fill='%23FFFFFF'/%3E%3Crect x='18' y='64' width='5' height='5' fill='%23FFFFFF'/%3E%3Crect x='74' y='74' width='6' height='6' fill='%23FFFFFF'/%3E%3Crect x='104' y='92' width='4' height='4' fill='%23FFFFFF'/%3E%3C/g%3E%3Cg opacity='.08'%3E%3Cpath d='M0 40H120' stroke='%23FFFFFF'/%3E%3Cpath d='M0 80H120' stroke='%23FFFFFF'/%3E%3Cpath d='M40 0V120' stroke='%23FFFFFF'/%3E%3Cpath d='M80 0V120' stroke='%23FFFFFF'/%3E%3C/g%3E%3C/svg%3E");
+      background-attachment: fixed, fixed, fixed, fixed, fixed;
+      overflow-x:hidden;
+    }
+
+    *{ box-sizing:border-box; }
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; display:block; }
+
+    .container{
+      width:min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    /* Skip-link accesibilidad */
+    .skip{
+      position:absolute; left:-999px; top:0;
+      background:#000; color:#fff;
+      padding:10px 14px; border-radius:10px;
+      z-index:9999;
+    }
+    .skip:focus{ left:16px; top:16px; }
+
+    /* NAV */
+    .nav{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      height:var(--navH);
+      backdrop-filter: blur(14px);
+      background: linear-gradient(180deg, rgba(10,16,34,.78), rgba(10,16,34,.48));
+      border-bottom: 1px solid var(--stroke);
+    }
+
+    .navInner{
+      height:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 220px;
+    }
+    .logo{
+      width:40px;
+      height:40px;
+      border-radius:14px;
+      background: linear-gradient(135deg, rgba(56,231,166,.85), rgba(91,179,255,.75), rgba(255,61,127,.75));
+      box-shadow: var(--shadowSoft);
+      position:relative;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .logo:after{
+      content:"";
+      position:absolute; inset:-30%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.55), transparent 45%);
+      transform: rotate(10deg);
+      opacity:.9;
+    }
+
+    .brandName{
+      font-family:"Space Grotesk","Rubik",sans-serif;
+      font-weight:800;
+      letter-spacing:.2px;
+      line-height:1.05;
+      font-size: 1.05rem;
+    }
+    .brandTag{
+      display:block;
+      font-weight:400;
+      color:var(--muted);
+      font-size:.82rem;
+      margin-top:2px;
+    }
+
+    .tabs{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+
+    .tab{
+      position:relative;
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: rgba(234,240,255,.92);
+      font-weight:600;
+      font-size:.92rem;
+      transition: transform .22s var(--ease), background .22s var(--ease), border-color .22s var(--ease);
+      will-change: transform;
+    }
+    .tab:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.07);
+      border-color: rgba(255,255,255,.18);
+    }
+    .tab.active{
+      background: linear-gradient(135deg, rgba(56,231,166,.18), rgba(91,179,255,.14), rgba(255,61,127,.12));
+      border-color: rgba(255,255,255,.22);
+    }
+
+    .ctaTop{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-end;
+      min-width: 230px;
+    }
+
+    /* Botón estilo power-up */
+    .btn{
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      border:0;
+      color: var(--txt);
+      font-weight:800;
+      letter-spacing:.2px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(255,210,74,.95), rgba(255,61,127,.85));
+      box-shadow: 0 14px 30px rgba(255,61,127,.18), 0 12px 26px rgba(255,210,74,.14);
+      transition: transform .22s var(--ease), filter .22s var(--ease), box-shadow .22s var(--ease);
+      position:relative;
+      overflow:hidden;
+      white-space:nowrap;
+    }
+    .btn:before{
+      content:"";
+      position:absolute;
+      inset:-80%;
+      background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.55), transparent 40%);
+      transform: rotate(12deg);
+      opacity:.85;
+    }
+    .btn:hover{
+      transform: translateY(-2px) scale(1.01);
+      filter: saturate(1.08);
+      box-shadow: 0 16px 36px rgba(255,61,127,.22), 0 14px 30px rgba(255,210,74,.18);
+    }
+    .btn:active{ transform: translateY(0) scale(.995); }
+
+    .btnSecondary{
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: var(--shadowSoft);
+      font-weight:700;
+    }
+    .btnSecondary:before{ opacity:.55; }
+
+    .btnMini{
+      padding:10px 12px;
+      font-size:.92rem;
+      border-radius: 13px;
+    }
+
+    .icon{
+      width:18px; height:18px; flex:0 0 18px;
+      display:inline-block;
+    }
+
+    /* SECCIONES */
+    section{
+      padding: 74px 0;
+      scroll-margin-top: calc(var(--navH) + 18px);
+    }
+
+    .hero{
+      padding-top: 46px;
+      padding-bottom: 54px;
+    }
+
+    .heroGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 26px;
+      align-items:center;
+    }
+
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: rgba(234,240,255,.9);
+      width: fit-content;
+      box-shadow: var(--shadowSoft);
+      font-weight:600;
+      font-size:.92rem;
+    }
+    .chipDot{
+      width:10px; height:10px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(56,231,166,.9));
+      box-shadow: 0 0 0 4px rgba(56,231,166,.14);
+      animation: pulse 1.9s var(--ease) infinite;
+    }
+    @keyframes pulse{
+      0%,100%{ transform: scale(1); opacity:1; }
+      50%{ transform: scale(1.2); opacity:.85; }
+    }
+
+    h1{
+      margin: 16px 0 8px;
+      font-family:"Space Grotesk","Rubik",sans-serif;
+      font-size: clamp(2.2rem, 4.6vw, 3.4rem);
+      line-height:1.05;
+      letter-spacing:-.5px;
+    }
+    .subtitle{
+      margin: 10px 0 22px;
+      color: var(--muted);
+      font-size: clamp(1.02rem, 1.4vw, 1.14rem);
+      line-height:1.55;
+      max-width: 56ch;
+    }
+
+    .heroActions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      margin-bottom: 18px;
+    }
+
+    .trust{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(14,23,49,.86), rgba(14,23,49,.58));
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadowSoft);
+      overflow:hidden;
+      position:relative;
+    }
+
+    /* detalle tipo "bloque" en esquina */
+    .card:before{
+      content:"";
+      position:absolute;
+      top:14px; right:14px;
+      width:46px; height:46px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background:
+        linear-gradient(135deg, rgba(255,210,74,.22), rgba(255,61,127,.12)),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.08) 0 6px, transparent 6px 12px);
+      opacity:.9;
+      transform: rotate(8deg);
+      filter: blur(.0px);
+    }
+
+    .cardInner{
+      padding: 18px 16px;
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+    }
+    .badgeIcon{
+      width:44px; height:44px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      display:grid;
+      place-items:center;
+      box-shadow: var(--shadowSoft);
+      flex: 0 0 44px;
+    }
+    .card h3{
+      margin: 0 0 6px;
+      font-size: 1.03rem;
+      font-weight:800;
+      letter-spacing:.1px;
+    }
+    .card p{
+      margin:0;
+      color: rgba(234,240,255,.78);
+      font-size: .95rem;
+      line-height:1.45;
+    }
+
+    /* Panel ilustrativo (derecha) */
+    .showcase{
+      padding: 18px;
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(14,23,49,.72), rgba(14,23,49,.36));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .showcase:before{
+      content:"";
+      position:absolute; inset:-40%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(56,231,166,.25), transparent 45%),
+        radial-gradient(circle at 70% 20%, rgba(255,61,127,.22), transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(255,210,74,.18), transparent 55%);
+      transform: rotate(18deg);
+    }
+    .showcaseInner{
+      position:relative;
+      display:grid;
+      gap:12px;
+    }
+
+    .floatingRow{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .pill{
+      display:inline-flex;
+      gap:10px;
+      align-items:center;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadowSoft);
+      font-weight:700;
+      font-size:.92rem;
+      animation: floaty 4.2s var(--ease2) infinite;
+    }
+    .pill:nth-child(2){ animation-delay: .45s; }
+    .pill:nth-child(3){ animation-delay: .9s; }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-4px); }
+    }
+
+    .coinGrid{
+      display:grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap:10px;
+      margin-top: 6px;
+    }
+    .coin{
+      aspect-ratio: 1/1;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), transparent 50%),
+        linear-gradient(135deg, rgba(255,210,74,.45), rgba(255,61,127,.14));
+      box-shadow: var(--shadowSoft);
+      transform: rotate(6deg);
+      opacity:.9;
+    }
+
+    /* Servicios */
+    .sectionTitle{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+    .sectionTitle h2{
+      margin:0;
+      font-family:"Space Grotesk","Rubik",sans-serif;
+      font-size: clamp(1.6rem, 2.2vw, 2.0rem);
+      letter-spacing:-.3px;
+    }
+    .sectionTitle p{
+      margin:0;
+      color:var(--muted);
+      max-width: 62ch;
+      line-height:1.5;
+      font-size: .98rem;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .serviceCard{
+      padding: 18px 16px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(14,23,49,.76), rgba(14,23,49,.45));
+      box-shadow: var(--shadowSoft);
+      position:relative;
+      overflow:hidden;
+      transition: transform .22s var(--ease), border-color .22s var(--ease), background .22s var(--ease);
+      will-change: transform;
+      min-height: 180px;
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .serviceCard:hover{
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(14,23,49,.86), rgba(14,23,49,.52));
+    }
+    .serviceTop{
+      display:flex;
+      gap: 12px;
+      align-items:flex-start;
+    }
+    .serviceIcon{
+      width:46px; height:46px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.14);
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.2), transparent 55%),
+        linear-gradient(135deg, rgba(91,179,255,.22), rgba(177,140,255,.14));
+      box-shadow: var(--shadowSoft);
+      display:grid;
+      place-items:center;
+      flex: 0 0 46px;
+    }
+    .serviceCard h3{
+      margin:0 0 4px;
+      font-weight:900;
+      font-size: 1.02rem;
+      letter-spacing:.1px;
+    }
+    .serviceCard p{
+      margin:0;
+      color: rgba(234,240,255,.78);
+      font-size: .95rem;
+      line-height:1.45;
+    }
+    .serviceActions{
+      margin-top:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      padding-top: 4px;
+    }
+    .hint{
+      color: rgba(234,240,255,.65);
+      font-size:.86rem;
+    }
+
+    /* Contacto */
+    .contactGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      align-items:start;
+    }
+    .panel{
+      padding: 18px 16px;
+      border-radius: var(--radius2);
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(14,23,49,.78), rgba(14,23,49,.42));
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .panelHeader{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-bottom: 10px;
+    }
+    .panelHeader h3{
+      margin:0;
+      font-size: 1.12rem;
+      font-weight:900;
+    }
+    .panelHeader p{
+      margin: 4px 0 0;
+      color: var(--muted);
+      line-height:1.45;
+      font-size: .95rem;
+    }
+
+    form{
+      display:grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .row2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    label{
+      font-weight:700;
+      font-size: .9rem;
+      color: rgba(234,240,255,.9);
+      display:block;
+      margin-bottom: 6px;
+    }
+
+    input, select, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--txt);
+      outline:none;
+      transition: border-color .18s var(--ease), transform .18s var(--ease), background .18s var(--ease);
+      font-family: inherit;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    textarea{ min-height: 120px; resize: vertical; }
+    input:focus, select:focus, textarea:focus{
+      border-color: rgba(91,179,255,.5);
+      background: rgba(255,255,255,.075);
+      transform: translateY(-1px);
+    }
+    .notice{
+      margin: 0;
+      color: rgba(234,240,255,.72);
+      font-size: .9rem;
+      line-height:1.45;
+    }
+    .notice strong{ color: rgba(255,210,74,.95); }
+
+    .alert{
+      display:none;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,240,255,.9);
+      font-size: .92rem;
+      line-height:1.4;
+    }
+    .alert.show{ display:block; }
+
+    /* Footer */
+    footer{
+      padding: 28px 0 42px;
+      border-top:1px solid var(--stroke);
+      background: rgba(0,0,0,.12);
+    }
+    .footGrid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr 1fr;
+      gap: 14px;
+      align-items:start;
+    }
+    .footTitle{
+      font-family:"Space Grotesk","Rubik",sans-serif;
+      font-weight:900;
+      margin:0 0 8px;
+    }
+    .footText{
+      margin:0;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:.95rem;
+    }
+    .footList{
+      margin:0;
+      padding:0;
+      list-style:none;
+      display:grid;
+      gap:8px;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+    .social{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .social a{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      transition: transform .2s var(--ease), background .2s var(--ease);
+      font-weight:700;
+      font-size:.92rem;
+    }
+    .social a:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.07);
+    }
+    .copy{
+      margin-top: 16px;
+      color: rgba(234,240,255,.55);
+      font-size:.88rem;
+    }
+
+    /* Scroll reveal (suave + performance) */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: opacity .6s var(--ease), transform .6s var(--ease);
+      will-change: opacity, transform;
+    }
+    .reveal.in{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    /* Hero entrada: slide + fade */
+    .heroIntro{
+      opacity:0;
+      transform: translateY(16px);
+      animation: heroIn .75s var(--ease2) .08s forwards;
+    }
+    .heroIntro2{
+      opacity:0;
+      transform: translateY(16px);
+      animation: heroIn .75s var(--ease2) .18s forwards;
+    }
+    @keyframes heroIn{
+      to{ opacity:1; transform: translateY(0); }
+    }
+
+    /* Botón flotante WhatsApp */
+    .waFloat{
+      position:fixed;
+      right:16px;
+      bottom:16px;
+      z-index:1200;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: linear-gradient(135deg, rgba(56,231,166,.22), rgba(91,179,255,.14));
+      box-shadow: var(--shadow);
+      transition: transform .22s var(--ease), background .22s var(--ease);
+      font-weight:900;
+    }
+    .waFloat:hover{ transform: translateY(-3px); }
+    .waDot{
+      width:12px; height:12px; border-radius:50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.8), rgba(56,231,166,.95));
+      box-shadow: 0 0 0 4px rgba(56,231,166,.15);
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .heroGrid{ grid-template-columns: 1fr; }
+      .ctaTop{ min-width:auto; }
+      .brand{ min-width:auto; }
+      .trust{ grid-template-columns: 1fr; }
+      .grid{ grid-template-columns: repeat(2, 1fr); }
+      .contactGrid{ grid-template-columns: 1fr; }
+      .footGrid{ grid-template-columns: 1fr; }
+      .coinGrid{ grid-template-columns: repeat(6, 1fr); }
+    }
+    @media (max-width: 560px){
+      .tabs{ gap:8px; }
+      .tab{ font-size:.9rem; padding:9px 11px; }
+      .grid{ grid-template-columns: 1fr; }
+      .row2{ grid-template-columns: 1fr; }
+      .coinGrid{ grid-template-columns: repeat(3, 1fr); }
+      .ctaTop .btn{ display:none; } /* En móvil, dejas CTA principal abajo + waFloat */
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+      .reveal{ opacity:1; transform:none; }
+      .heroIntro,.heroIntro2{ opacity:1; transform:none; animation:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip" href="#inicio">Saltar al contenido</a>
+
+  <header class="nav" role="banner">
+    <div class="container navInner">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>
+          <div class="brandName">Brothers Solutions</div>
+          <span class="brandTag">Soluciones rápidas y con estilo</span>
+        </div>
+      </div>
+
+      <nav class="tabs" aria-label="Navegación principal">
+        <a class="tab" href="#inicio" data-tab="inicio">Inicio</a>
+        <a class="tab" href="#servicios" data-tab="servicios">Servicios</a>
+        <a class="tab" href="#contacto" data-tab="contacto">Contacto</a>
+      </nav>
+
+      <div class="ctaTop">
+        <a class="btn btnMini" id="topCta" href="#" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Cotizar / WhatsApp
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- INICIO -->
+    <section id="inicio" class="hero">
+      <div class="container heroGrid">
+        <div>
+          <div class="kicker heroIntro">
+            <span class="chipDot" aria-hidden="true"></span>
+            Energía retro, ejecución pro ⚡
+          </div>
+
+          <h1 class="heroIntro">Brothers Solutions</h1>
+          <p class="subtitle heroIntro2">PCs, Consolas y Web — Soluciones rápidas y con estilo.</p>
+
+          <div class="heroActions heroIntro2">
+            <a class="btn btnSecondary" href="#servicios">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Ver servicios
+            </a>
+
+            <a class="btn" href="#contacto">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M21 8.5V16a2 2 0 0 1-2 2H7l-4 3V6a2 2 0 0 1 2-2h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M15 5h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              Contactar
+            </a>
+          </div>
+
+          <div class="trust reveal">
+            <div class="card">
+              <div class="cardInner">
+                <div class="badgeIcon" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 2l3 6 7 .8-5 4.5 1.4 7-6.4-3.4L5.6 20l1.4-7L2 8.8 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Diagnóstico</h3>
+                  <p>Revisamos rápido y te explicamos claro.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="cardInner">
+                <div class="badgeIcon" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3l7 4v6c0 5-3 8-7 9-4-1-7-4-7-9V7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M9 12l2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Garantía</h3>
+                  <p>Trabajo responsable y respaldo real.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="cardInner">
+                <div class="badgeIcon" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 14c2-6 14-6 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M6 10l-2 4 4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18 10l2 4-4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Atención rápida</h3>
+                  <p>Prioridad a soluciones efectivas sin vueltas.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="showcase reveal" aria-label="Panel visual retro moderno">
+          <div class="showcaseInner">
+            <div class="floatingRow">
+              <div class="pill">
+                <span aria-hidden="true">🧩</span> Upgrades & builds
+              </div>
+              <div class="pill">
+                <span aria-hidden="true">🕹️</span> Consolas listas
+              </div>
+              <div class="pill">
+                <span aria-hidden="true">🌐</span> Web rápida
+              </div>
+            </div>
+            <p class="notice" style="margin-top:4px;">
+              Botones con “power-up”, sombras suaves y micro-animaciones — <strong>performance primero</strong>.
+            </p>
+            <div class="coinGrid" aria-hidden="true">
+              <div class="coin"></div><div class="coin"></div><div class="coin"></div><div class="coin"></div><div class="coin"></div><div class="coin"></div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios">
+      <div class="container">
+        <div class="sectionTitle reveal">
+          <div>
+            <h2>Servicios</h2>
+            <p>Elegí lo que necesitás y consultá por WhatsApp con mensaje prellenado.</p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <!-- Servicio 1 -->
+          <article class="serviceCard reveal" data-service="Armamos la PC a tu gusto">
+            <div class="serviceTop">
+              <div class="serviceIcon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M7 7h10v10H7z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M4 12h3M17 12h3M12 4v3M12 17v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Armamos la PC a tu gusto</h3>
+                <p>Componentes a medida: rendimiento, estética y presupuesto.</p>
+              </div>
+            </div>
+            <div class="serviceActions">
+              <span class="hint">Build “A+” para tu setup.</span>
+              <a class="btn btnMini js-wa" href="#" rel="noopener">Consultar por WhatsApp</a>
+            </div>
+          </article>
+
+          <!-- Servicio 2 -->
+          <article class="serviceCard reveal" data-service="Mantenimiento y reparación de PCs">
+            <div class="serviceTop">
+              <div class="serviceIcon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 7h18v10H3z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M7 17v3h10v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M7 11h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Mantenimiento y reparación de PCs</h3>
+                <p>Limpieza, pasta térmica, revisión y solución de fallas.</p>
+              </div>
+            </div>
+            <div class="serviceActions">
+              <span class="hint">Más frío, más FPS 😄</span>
+              <a class="btn btnMini js-wa" href="#" rel="noopener">Consultar por WhatsApp</a>
+            </div>
+          </article>
+
+          <!-- Servicio 3 -->
+          <article class="serviceCard reveal" data-service="Mantenimiento y reparación de consolas">
+            <div class="serviceTop">
+              <div class="serviceIcon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M7 14c-2 0-4 1.5-4 3.5S5 21 7 21h10c2 0 4-1.5 4-3.5S19 14 17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M9 10h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 3v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Mantenimiento y reparación de consolas</h3>
+                <p>Diagnóstico, limpieza y reparación para volver a jugar.</p>
+              </div>
+            </div>
+            <div class="serviceActions">
+              <span class="hint">Volvé al game sin drama.</span>
+              <a class="btn btnMini js-wa" href="#" rel="noopener">Consultar por WhatsApp</a>
+            </div>
+          </article>
+
+          <!-- Servicio 4 -->
+          <article class="serviceCard reveal" data-service="Cambio de joysticks">
+            <div class="serviceTop">
+              <div class="serviceIcon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 9v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M6 20h12a3 3 0 0 0 3-3v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2a3 3 0 0 0 3 3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Cambio de joysticks</h3>
+                <p>Drift, botones o sticks: reemplazo y calibración.</p>
+              </div>
+            </div>
+            <div class="serviceActions">
+              <span class="hint">Precisión restored ✅</span>
+              <a class="btn btnMini js-wa" href="#" rel="noopener">Consultar por WhatsApp</a>
+            </div>
+          </article>
+
+          <!-- Servicio 5 -->
+          <article class="serviceCard reveal" data-service="Flasheo de consolas de antigua generación">
+            <div class="serviceTop">
+              <div class="serviceIcon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 8h16v10H4z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 8V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M7 13h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M14.5 13h.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M17.5 13h.5" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Flasheo de consolas de antigua generación</h3>
+                <p>Optimización y puesta a punto (según modelo/estado).</p>
+              </div>
+            </div>
+            <div class="serviceActions">
+              <span class="hint">Retro vibes, setup actual.</span>
+              <a class="btn btnMini js-wa" href="#" rel="noopener">Consultar por WhatsApp</a>
+            </div>
+          </article>
+
+          <!-- Servicio 6 -->
+          <article class="serviceCard reveal" data-service="Creación de páginas web">
+            <div class="serviceTop">
+              <div class="serviceIcon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 5h16v14H4z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 9h8M8 13h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Creación de páginas web</h3>
+                <p>Landing rápida, responsive y con diseño moderno.</p>
+              </div>
+            </div>
+            <div class="serviceActions">
+              <span class="hint">Tu marca con estilo.</span>
+              <a class="btn btnMini js-wa" href="#" rel="noopener">Consultar por WhatsApp</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto">
+      <div class="container">
+        <div class="sectionTitle reveal">
+          <div>
+            <h2>Contacto</h2>
+            <p>Completá el formulario y se abrirá WhatsApp con tu solicitud lista para enviar.</p>
+          </div>
+        </div>
+
+        <div class="contactGrid">
+          <div class="panel reveal">
+            <div class="panelHeader">
+              <div class="badgeIcon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 8.5V16a2 2 0 0 1-2 2H7l-4 3V6a2 2 0 0 1 2-2h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 10h8M8 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>Pedí tu cotización</h3>
+                <p>Respuesta rápida. Contanos el detalle y te guiamos.</p>
+              </div>
+            </div>
+
+            <div class="alert" id="formAlert" role="status" aria-live="polite">
+              ✅ Se abrirá WhatsApp para enviar tu solicitud.
+            </div>
+
+            <form id="contactForm" novalidate>
+              <div class="row2">
+                <div>
+                  <label for="name">Nombre *</label>
+                  <input id="name" name="name" type="text" autocomplete="name" required placeholder="Tu nombre" />
+                </div>
+                <div>
+                  <label for="phone">Teléfono *</label>
+                  <input id="phone" name="phone" type="tel" autocomplete="tel" required placeholder="Ej: 300 000 0000" />
+                </div>
+              </div>
+
+              <div class="row2">
+                <div>
+                  <label for="email">Correo *</label>
+                  <input id="email" name="email" type="email" autocomplete="email" required placeholder="tu@mail.com" />
+                </div>
+                <div>
+                  <label for="topic">Tipo de problema/necesidad *</label>
+                  <select id="topic" name="topic" required>
+                    <option value="" selected disabled>Seleccionar…</option>
+                    <option>Armado de PC</option>
+                    <option>Mantenimiento/Reparación PC</option>
+                    <option>Mantenimiento/Reparación Consola</option>
+                    <option>Cambio de Joysticks</option>
+                    <option>Flasheo Consolas Antiguas</option>
+                    <option>Creación de Página Web</option>
+                    <option>Otro</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="message">Mensaje *</label>
+                <textarea id="message" name="message" required placeholder="Contanos el problema, modelo, síntomas, presupuesto, tiempos…"></textarea>
+              </div>
+
+              <p class="notice">
+                <strong>Nota:</strong> al enviar, se abrirá WhatsApp con el mensaje ya armado.
+              </p>
+
+              <button class="btn" type="submit">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 12a8.5 8.5 0 0 1-8.5 8.5A8.5 8.5 0 1 1 21 12Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8.5 12.3c1.4 2.6 3.2 4.1 5.6 5.2.4.2.9.1 1.2-.2l1.2-1.2c.2-.2.2-.5 0-.7l-1.5-1.1c-.2-.2-.5-.2-.7 0l-.6.6c-.2.2-.4.2-.6.1-1.2-.6-2.2-1.5-3-2.6-.1-.2-.1-.5.1-.6l.6-.6c.2-.2.2-.5 0-.7L9.6 7.9c-.2-.2-.5-.2-.7 0L7.7 9.1c-.3.3-.4.8-.2 1.2Z" fill="currentColor" opacity=".75"/>
+                </svg>
+                Enviar por WhatsApp
+              </button>
+            </form>
+          </div>
+
+          <aside class="panel reveal">
+            <div class="panelHeader">
+              <div class="badgeIcon" aria-hidden="true">
+                <svg class="icon" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2l4 8-4 4-4-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M6 22h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M8 14l-2 8M16 14l2 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h3>¿Preferís escribir directo?</h3>
+                <p>Usá el botón de WhatsApp para cotizar rápido.</p>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:12px;">
+              <div class="cardInner">
+                <div class="badgeIcon" aria-hidden="true">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <h3>Tip rápido</h3>
+                  <p>Si podés, mandá modelo, falla y si ya probaste algo (cables, limpieza, etc.).</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="heroActions" style="margin-top:14px;">
+              <a class="btn btnSecondary" id="directWa" href="#" rel="noopener">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M21 12a9 9 0 0 1-13.8 7.6L3 21l1.5-4.1A9 9 0 1 1 21 12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M9.3 10.3c.4 1.2 1.6 2.7 2.8 3.6 1.3 1 2.5 1.4 3.2 1.5.4 0 .7-.2.9-.4l.6-.7c.2-.2.2-.5 0-.7l-1.4-1.2c-.2-.1-.5-.1-.7 0l-.4.4c-.2.2-.4.2-.6.1-1.1-.5-2.3-1.6-3-2.7-.1-.2-.1-.4.1-.6l.4-.4c.2-.2.2-.5 0-.7L10 8.2c-.2-.2-.5-.2-.7 0l-.7.8c-.2.2-.3.6-.2 1.3Z" fill="currentColor" opacity=".75"/>
+                </svg>
+                Cotizar / Escribir por WhatsApp
+              </a>
+              <a class="btn" href="#servicios">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Ver servicios
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="footGrid reveal">
+        <div>
+          <h3 class="footTitle">Brothers Solutions</h3>
+          <p class="footText">PCs, Consolas y Web — Soluciones rápidas y con estilo. Inspiración retro + ejecución moderna.</p>
+          <div class="social" aria-label="Redes sociales">
+            <a href="#" aria-label="Instagram (placeholder)">
+              <span aria-hidden="true">📸</span> Instagram
+            </a>
+            <a href="#" aria-label="Facebook (placeholder)">
+              <span aria-hidden="true">💬</span> Facebook
+            </a>
+            <a href="#" aria-label="TikTok (placeholder)">
+              <span aria-hidden="true">🎬</span> TikTok
+            </a>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="footTitle">Horarios</h3>
+          <ul class="footList">
+            <li>Lunes a Viernes: (placeholder)</li>
+            <li>Sábados: (placeholder)</li>
+            <li>Domingos/Feriados: (placeholder)</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="footTitle">Contacto</h3>
+          <ul class="footList">
+            <li>WhatsApp: (tu número)</li>
+            <li>Ciudad: (placeholder)</li>
+            <li>Correo: (placeholder)</li>
+          </ul>
+          <p class="copy">© <span id="year"></span> Brothers Solutions. Todos los derechos reservados.</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- WhatsApp Floating Button -->
+  <a class="waFloat" id="waFloat" href="#" rel="noopener" aria-label="Abrir WhatsApp">
+    <span class="waDot" aria-hidden="true"></span>
+    WhatsApp
+  </a>
+
+  <script>
+    // ==========================================================
+    // CONFIG: Cambia aquí tu número (formato internacional sin +)
+    // Ejemplo Colombia: 573001112233
+    // ==========================================================
+    const WHATSAPP_NUMBER = "TU_NUMERO_AQUI";
+
+    function waLink(message){
+      const text = encodeURIComponent(message);
+      return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
+    }
+
+    // CTA superiores / directos
+    const topCta = document.getElementById("topCta");
+    const directWa = document.getElementById("directWa");
+    const waFloat = document.getElementById("waFloat");
+
+    const defaultMsg = "Hola Brothers Solutions 👋 Quiero cotizar. ¿Me ayudan por favor?";
+    [topCta, directWa, waFloat].forEach(a => a.href = waLink(defaultMsg));
+
+    // Botones de servicios: mensaje prellenado por servicio
+    document.querySelectorAll(".serviceCard").forEach(card => {
+      const service = card.getAttribute("data-service") || "Servicio";
+      const btn = card.querySelector(".js-wa");
+      if(!btn) return;
+      const msg = `Hola Brothers Solutions 👋 Quiero consultar por: *${service}*.\n\nMi detalle: `;
+      btn.href = waLink(msg);
+    });
+
+    // Scroll reveal (IntersectionObserver)
+    const revealEls = document.querySelectorAll(".reveal");
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.14, rootMargin: "0px 0px -10% 0px" });
+
+    revealEls.forEach(el => io.observe(el));
+
+    // Tabs active según scroll
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const sections = ["inicio","servicios","contacto"].map(id => document.getElementById(id));
+
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const id = entry.target.id;
+          tabs.forEach(t => t.classList.toggle("active", t.dataset.tab === id));
+        }
+      });
+    }, { threshold: 0.55 });
+
+    sections.forEach(s => s && spy.observe(s));
+
+    // Form -> WhatsApp con validación básica
+    const form = document.getElementById("contactForm");
+    const alertBox = document.getElementById("formAlert");
+
+    function setAlert(show){
+      alertBox.classList.toggle("show", !!show);
+    }
+
+    form.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      setAlert(false);
+
+      // Basic required validation
+      const name = document.getElementById("name");
+      const phone = document.getElementById("phone");
+      const email = document.getElementById("email");
+      const topic = document.getElementById("topic");
+      const message = document.getElementById("message");
+
+      const fields = [name, phone, email, topic, message];
+      let ok = true;
+
+      fields.forEach(f => {
+        if(!f.value || (f.tagName === "SELECT" && f.value === "")){
+          ok = false;
+          f.style.borderColor = "rgba(255,61,127,.65)";
+        } else {
+          f.style.borderColor = "rgba(255,255,255,.12)";
+        }
+      });
+
+      // Validación email mínima
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+      if(!emailOk){
+        ok = false;
+        email.style.borderColor = "rgba(255,61,127,.65)";
+      }
+
+      if(!ok){
+        // Pequeño feedback accesible (sin alert intrusivo)
+        setAlert(true);
+        alertBox.textContent = "⚠️ Revisá los campos obligatorios (y que el correo sea válido).";
+        return;
+      }
+
+      const msg =
+`Hola Brothers Solutions 👋
+Quiero cotizar / solicitar ayuda.
+
+• Nombre: ${name.value.trim()}
+• Teléfono: ${phone.value.trim()}
+• Correo: ${email.value.trim()}
+• Tipo: ${topic.value}
+
+• Mensaje:
+${message.value.trim()}
+
+(Enviado desde la web)`;
+
+      const url = waLink(msg);
+
+      setAlert(true);
+      alertBox.textContent = "✅ Se abrirá WhatsApp para enviar tu solicitud.";
+
+      // Abre WhatsApp en nueva pestaña (mejor UX en desktop)
+      window.open(url, "_blank", "noopener,noreferrer");
+    });
+
+    // Año en footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
