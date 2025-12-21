@@ -13,19 +13,19 @@
 
   <style>
     :root{
-      --bg0:#070A12;
-      --bg1:#0A1022;
-      --card:#0E1731cc;
-      --stroke:#ffffff1a;
+      --bg0:#1a1a1a;
+      --bg1:#2d2d2d;
+      --card:#3d3d3dcc;
+      --stroke:#ffffff2a;
 
-      --txt:#EAF0FF;
-      --muted:#AAB6E8;
+      --txt:#FFD700;
+      --muted:#FFB700;
 
-      --g:#38E7A6;   /* verde power */
-      --r:#FF3D7F;   /* rosa/rojo neon */
-      --y:#FFD24A;   /* dorado moneda */
-      --b:#5BB3FF;   /* azul */
-      --p:#B18CFF;   /* violeta */
+      --mario:#E60012;   /* rojo Mario */
+      --luigi:#00AA00;   /* verde Luigi */
+      --gold:#FFD700;    /* dorado moneda */
+      --blue:#0066FF;    /* azul cielo */
+      --mushroom:#FF6B6B; /* rojo seta */
 
       --shadow: 0 18px 45px rgba(0,0,0,.35);
       --shadowSoft: 0 10px 25px rgba(0,0,0,.28);
@@ -103,11 +103,20 @@
       width:40px;
       height:40px;
       border-radius:14px;
-      background: linear-gradient(135deg, rgba(56,231,166,.85), rgba(91,179,255,.75), rgba(255,61,127,.75));
+      background: linear-gradient(135deg, rgba(230,0,18,.85), rgba(255,215,0,.75), rgba(0,170,0,.75));
       box-shadow: var(--shadowSoft);
       position:relative;
       overflow:hidden;
       border: 1px solid rgba(255,255,255,.14);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:24px;
+      animation: marioFloat 3s ease-in-out infinite;
+    }
+    @keyframes marioFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
     .logo:after{
       content:"";
@@ -158,7 +167,7 @@
       border-color: rgba(255,255,255,.18);
     }
     .tab.active{
-      background: linear-gradient(135deg, rgba(56,231,166,.18), rgba(91,179,255,.14), rgba(255,61,127,.12));
+      background: linear-gradient(135deg, rgba(230,0,18,.18), rgba(255,215,0,.14), rgba(0,170,0,.12));
       border-color: rgba(255,255,255,.22);
     }
 
@@ -170,7 +179,7 @@
       min-width: 230px;
     }
 
-    /* Botón estilo power-up */
+    /* Botón estilo Mario power-up */
     .btn{
       cursor:pointer;
       display:inline-flex;
@@ -182,8 +191,8 @@
       letter-spacing:.2px;
       padding: 12px 14px;
       border-radius: 14px;
-      background: linear-gradient(135deg, rgba(255,210,74,.95), rgba(255,61,127,.85));
-      box-shadow: 0 14px 30px rgba(255,61,127,.18), 0 12px 26px rgba(255,210,74,.14);
+      background: linear-gradient(135deg, rgba(230,0,18,.95), rgba(255,215,0,.85));
+      box-shadow: 0 14px 30px rgba(230,0,18,.18), 0 12px 26px rgba(255,215,0,.14);
       transition: transform .22s var(--ease), filter .22s var(--ease), box-shadow .22s var(--ease);
       position:relative;
       overflow:hidden;
@@ -200,9 +209,12 @@
     .btn:hover{
       transform: translateY(-2px) scale(1.01);
       filter: saturate(1.08);
-      box-shadow: 0 16px 36px rgba(255,61,127,.22), 0 14px 30px rgba(255,210,74,.18);
+      box-shadow: 0 16px 36px rgba(230,0,18,.22), 0 14px 30px rgba(255,215,0,.18);
     }
-    .btn:active{ transform: translateY(0) scale(.995); }
+    .btn:active{ 
+      transform: translateY(0) scale(.995); 
+      animation: marioJump 0.3s ease-out;
+    }
 
     .btnSecondary{
       background: rgba(255,255,255,.06);
@@ -257,13 +269,25 @@
     }
     .chipDot{
       width:10px; height:10px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(56,231,166,.9));
-      box-shadow: 0 0 0 4px rgba(56,231,166,.14);
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.9), rgba(230,0,18,.9));
+      box-shadow: 0 0 0 4px rgba(230,0,18,.14);
       animation: pulse 1.9s var(--ease) infinite;
     }
     @keyframes pulse{
       0%,100%{ transform: scale(1); opacity:1; }
       50%{ transform: scale(1.2); opacity:.85; }
+    }
+
+    /* Monedas animadas Mario */
+    @keyframes coinSpin {
+      0% { transform: rotateY(0); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(360deg); }
+    }
+
+    @keyframes marioJump {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     h1{
@@ -364,9 +388,9 @@
       content:"";
       position:absolute; inset:-40%;
       background:
-        radial-gradient(circle at 30% 30%, rgba(56,231,166,.25), transparent 45%),
-        radial-gradient(circle at 70% 20%, rgba(255,61,127,.22), transparent 45%),
-        radial-gradient(circle at 50% 80%, rgba(255,210,74,.18), transparent 55%);
+        radial-gradient(circle at 30% 30%, rgba(230,0,18,.25), transparent 45%),
+        radial-gradient(circle at 70% 20%, rgba(255,215,0,.22), transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(0,170,0,.18), transparent 55%);
       transform: rotate(18deg);
     }
     .showcaseInner{
@@ -405,6 +429,7 @@
       grid-template-columns: repeat(6, 1fr);
       gap:10px;
       margin-top: 6px;
+      perspective: 1000px;
     }
     .coin{
       aspect-ratio: 1/1;
@@ -412,10 +437,21 @@
       border:1px solid rgba(255,255,255,.12);
       background:
         radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), transparent 50%),
-        linear-gradient(135deg, rgba(255,210,74,.45), rgba(255,61,127,.14));
+        linear-gradient(135deg, rgba(230,0,18,.45), rgba(255,215,0,.55));
       box-shadow: var(--shadowSoft);
       transform: rotate(6deg);
       opacity:.9;
+      position: relative;
+    }
+    .coin::before {
+      content: "M";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.8em;
+      font-weight: bold;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     /* Servicios */
@@ -700,7 +736,7 @@
       padding: 12px 14px;
       border-radius: 999px;
       border:1px solid rgba(255,255,255,.14);
-      background: linear-gradient(135deg, rgba(56,231,166,.22), rgba(91,179,255,.14));
+      background: linear-gradient(135deg, rgba(230,0,18,.22), rgba(255,215,0,.14));
       box-shadow: var(--shadow);
       transition: transform .22s var(--ease), background .22s var(--ease);
       font-weight:900;
@@ -708,8 +744,8 @@
     .waFloat:hover{ transform: translateY(-3px); }
     .waDot{
       width:12px; height:12px; border-radius:50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.8), rgba(56,231,166,.95));
-      box-shadow: 0 0 0 4px rgba(56,231,166,.15);
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.8), rgba(230,0,18,.95));
+      box-shadow: 0 0 0 4px rgba(230,0,18,.15);
     }
 
     /* Responsive */
@@ -747,7 +783,13 @@
   <header class="nav" role="banner">
     <div class="container navInner">
       <div class="brand">
-        <div class="logo" aria-hidden="true"></div>
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 40 40" style="width:100%;height:100%;">
+            <circle cx="20" cy="20" r="18" fill="#FFD700" stroke="#E6A000" stroke-width="1.5"/>
+            <text x="20" y="26" font-size="20" font-weight="bold" text-anchor="middle" fill="#E60012">M</text>
+            <circle cx="20" cy="20" r="18" fill="none" stroke="#E60012" stroke-width="0.8" opacity="0.5" style="animation: coinSpin 2s infinite;"/>
+          </svg>
+        </div>
         <div>
           <div class="brandName">Brothers Solutions</div>
           <span class="brandTag">Soluciones rápidas y con estilo</span>
@@ -778,11 +820,11 @@
         <div>
           <div class="kicker heroIntro">
             <span class="chipDot" aria-hidden="true"></span>
-            Energía retro, ejecución pro ⚡
+            Energía Mario, ejecución pro 🍄🔴
           </div>
 
           <h1 class="heroIntro">Brothers Solutions</h1>
-          <p class="subtitle heroIntro2">PCs, Consolas y Web — Soluciones rápidas y con estilo.</p>
+          <p class="subtitle heroIntro2">PCs, Consolas y Web — Reparaciones al estilo Mario y Luigi.</p>
 
           <div class="heroActions heroIntro2">
             <a class="btn btnSecondary" href="#servicios">
@@ -805,13 +847,11 @@
             <div class="card">
               <div class="cardInner">
                 <div class="badgeIcon" aria-hidden="true">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 2l3 6 7 .8-5 4.5 1.4 7-6.4-3.4L5.6 20l1.4-7L2 8.8 9 8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                  </svg>
+                  ⭐
                 </div>
                 <div>
-                  <h3>Diagnóstico</h3>
-                  <p>Revisamos rápido y te explicamos claro.</p>
+                  <h3>Diagnóstico Mario</h3>
+                  <p>Como los hermanos lo hacen. Rápido, claro y efectivo.</p>
                 </div>
               </div>
             </div>
@@ -819,14 +859,11 @@
             <div class="card">
               <div class="cardInner">
                 <div class="badgeIcon" aria-hidden="true">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 3l7 4v6c0 5-3 8-7 9-4-1-7-4-7-9V7z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    <path d="M9 12l2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  🛡️
                 </div>
                 <div>
-                  <h3>Garantía</h3>
-                  <p>Trabajo responsable y respaldo real.</p>
+                  <h3>Garantía Power-Up</h3>
+                  <p>Tu equipo vuelve mejor que nuevo. Trabajo responsable.</p>
                 </div>
               </div>
             </div>
@@ -834,15 +871,11 @@
             <div class="card">
               <div class="cardInner">
                 <div class="badgeIcon" aria-hidden="true">
-                  <svg class="icon" viewBox="0 0 24 24" fill="none">
-                    <path d="M4 14c2-6 14-6 16 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M6 10l-2 4 4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M18 10l2 4-4-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
+                  ⚡
                 </div>
                 <div>
-                  <h3>Atención rápida</h3>
-                  <p>Prioridad a soluciones efectivas sin vueltas.</p>
+                  <h3>Atención Rápida</h3>
+                  <p>Sin filas, sin esperas. Soluciones express Mario-style.</p>
                 </div>
               </div>
             </div>
@@ -866,7 +899,12 @@
               Botones con “power-up”, sombras suaves y micro-animaciones — <strong>performance primero</strong>.
             </p>
             <div class="coinGrid" aria-hidden="true">
-              <div class="coin"></div><div class="coin"></div><div class="coin"></div><div class="coin"></div><div class="coin"></div><div class="coin"></div>
+              <div class="coin" style="animation: coinSpin 1.5s infinite;"></div>
+              <div class="coin" style="animation: coinSpin 1.5s infinite 0.2s;"></div>
+              <div class="coin" style="animation: coinSpin 1.5s infinite 0.4s;"></div>
+              <div class="coin" style="animation: coinSpin 1.5s infinite 0.6s;"></div>
+              <div class="coin" style="animation: coinSpin 1.5s infinite 0.8s;"></div>
+              <div class="coin" style="animation: coinSpin 1.5s infinite 1s;"></div>
             </div>
           </div>
         </aside>
@@ -909,9 +947,9 @@
             <div class="serviceTop">
               <div class="serviceIcon" aria-hidden="true">
                 <svg class="icon" viewBox="0 0 24 24" fill="none">
-                  <path d="M3 7h18v10H3z" stroke="currentColor" stroke-width="2"/>
-                  <path d="M7 17v3h10v-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M7 11h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <rect x="3" y="8" width="18" height="2" fill="#00AA00" rx="1"/>
+                  <path d="M8 14h8v4H8z" fill="#E60012" stroke="currentColor" stroke-width="1"/>
+                  <circle cx="5" cy="5" r="2" fill="#FFD700"/>
                 </svg>
               </div>
               <div>
@@ -1148,8 +1186,8 @@
     <div class="container">
       <div class="footGrid reveal">
         <div>
-          <h3 class="footTitle">Brothers Solutions</h3>
-          <p class="footText">PCs, Consolas y Web — Soluciones rápidas y con estilo. Inspiración retro + ejecución moderna.</p>
+          <h3 class="footTitle">Brothers Solutions 🍄</h3>
+          <p class="footText">PCs, Consolas y Web — Reparaciones al estilo Mario y Luigi. Inspiración retro + ejecución moderna.</p>
           <div class="social" aria-label="Redes sociales">
             <a href="#" aria-label="Instagram (placeholder)">
               <span aria-hidden="true">📸</span> Instagram
